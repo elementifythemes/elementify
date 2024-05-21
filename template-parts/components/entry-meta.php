@@ -22,7 +22,7 @@ if ( in_array( get_post_type( $the_post_id ), array( 'page' ), true ) || empty( 
 			
 			if ( $value === 'author' ) {
 				$author_email = get_the_author_meta( 'user_email' );
-				$has_avatar   = elementify_has_gravatar( $author_email );
+				$has_avatar   = aquila_has_gravatar( $author_email );
 				$avatar       = get_avatar( $author_email, 24, '', '', [ 'class'   => 'ele-avatar-icon', 'default' => '404' ] );
 				?>
 				<li class="ele-post-meta post-author ele-d-flex ele-flex-wrap ele-align-items-center">

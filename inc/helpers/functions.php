@@ -13,7 +13,7 @@ use Elementify\Inc\Utils;
 |
 | Returns an array of navigation menus.
 */
-if ( ! function_exists('elementify_get_nav_menus') ) {
+if ( ! function_exists('bizness_get_nav_menus') ) {
     /**
      * Returns an array of navigation menus.
      *
@@ -21,7 +21,7 @@ if ( ! function_exists('elementify_get_nav_menus') ) {
      * @param string $value_field The value to be stored in options. Accepted values: id|slug.
      * @return array
      */
-    function elementify_get_nav_menus( $value_field = 'id' ) {
+    function bizness_get_nav_menus( $value_field = 'id' ) {
         $choices   = [];
         $nav_menus = wp_get_nav_menus();
 
@@ -618,10 +618,10 @@ add_filter(
 
 
 
-if( !function_exists( 'elementify_fonts_url' ) ) :
+if( !function_exists( 'bozu_fonts_url' ) ) :
 
     //Google Fonts URL
-    function elementify_fonts_url(){
+    function bozu_fonts_url(){
 
         $font_families = array(
             'Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700',

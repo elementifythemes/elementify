@@ -1,48 +1,49 @@
 {
-	"name": "elementify-framework",
-	"version": "1.0.0",
-	"description": "",
-	"main": "Gruntfile.js",
-	"author": "",
-	"license": "ISC",
-	"scripts": {
-		"build:admin": "wp-scripts build src/settings.js --webpack-src-dir=src/admin --webpack-copy-php --output-path=build/admin",
-		"build:public": "wp-scripts build src/public.js --webpack-src-dir=src/public --webpack-copy-php --output-path=build/public",
-		"build:blocks": "wp-scripts build --webpack-src-dir=src/blocks --webpack-copy-php --output-path=build/blocks",
-		"build": "npm-run-all --parallel build:admin build:public build:blocks",
-		"format": "wp-scripts format",
-		"lint:css": "wp-scripts lint-style",
-		"lint:js": "wp-scripts lint-js",
-		"start:customizer": "wp-scripts start assets/src/customizer/index.js --webpack-src-dir=assets/src/customizer --webpack-copy-php --output-path=assets/build/customizer",
-		"start:public": "wp-scripts start assets/src/public/index.js --webpack-src-dir=assets/src/public --webpack-copy-php --output-path=assets/build/public",
-		"start:blocks": "wp-scripts start --webpack-src-dir=src/blocks --webpack-copy-php --output-path=build/blocks",
-		"start": "npm-run-all --parallel start:customizer start:public",
-		"packages-update": "wp-scripts packages-update",
-		"clean": "rm -rf assets/build/*"
-	},
-	"devDependencies": {
-		"@wordpress/scripts": "^26.19.0",
-		"npm-run-all": "^4.1.5"
-	},
-	"dependencies": {
-		"@wordpress/block-editor": "^12.16.0",
-		"@wordpress/blocks": "^12.25.0",
-		"@wordpress/components": "^25.14.0",
-		"@wordpress/i18n": "^4.48.0",
-		"@wordpress/icons": "^9.39.0",
-		"@wordpress/url": "^3.49.0",
-		"autoprefixer": "^10.4.7",
-		"grunt-checktextdomain": "^1.0.1",
-		"grunt-contrib-clean": "^2.0.1",
-		"grunt-contrib-compress": "^2.0.0",
-		"grunt-contrib-copy": "^1.0.0",
-		"grunt-wp-i18n": "^1.0.3",
-		"lodash": "^4.17.21",
-		"react-router-dom": "^6.3.0",
-		"stylis": "^4.1.1"
-	},
-	"browserslist": [
-		"last 3 versions",
-		"> 1%"
-	]
+  "name": "elementify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "build": "wp-scripts build",
+    "check-engines": "wp-scripts check-engines",
+    "check-licenses": "wp-scripts check-licenses",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "lint:md:docs": "wp-scripts lint-md-docs",
+    "lint:pkg-json": "wp-scripts lint-pkg-json",
+    "packages-update": "wp-scripts packages-update",
+    "plugin-zip": "wp-scripts plugin-zip",
+    "start": "wp-scripts start",
+    "test:e2e": "wp-scripts test-e2e",
+    "test:unit": "wp-scripts test-unit-js",
+    "clean": "rm -rf assets/build/*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@wordpress/scripts": "^27.9.0",
+    "css-minimizer-webpack-plugin": "^7.0.0",
+    "grunt-checktextdomain": "^1.0.1",
+    "grunt-contrib-clean": "^2.0.1",
+    "grunt-contrib-compress": "^2.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-wp-i18n": "^1.0.3",
+    "grunt-wp-readme-to-markdown": "^2.1.0",
+    "mini-css-extract-plugin": "^2.9.0",
+    "postcss": "^8.4.38",
+    "postcss-loader": "^8.1.1",
+    "tailwindcss": "^3.4.3",
+    "terser-webpack-plugin": "^5.3.10",
+    "webpack-remove-empty-scripts": "^1.0.4"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.19",
+    "rtlcss-webpack-plugin": "^4.0.7"
+  },
+  "browserslist": [
+    "last 3 versions",
+    "> 1%"
+  ]
 }

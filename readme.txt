@@ -1,6 +1,6 @@
 === Elementify ===
 
-Contributors: elementifythemes
+Contributors: automattic
 Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
 
 Requires at least: 4.6
@@ -30,7 +30,7 @@ Elementify includes support for WooCommerce and for Infinite Scroll in Jetpack.
 
 == Changelog ==
 
-= 1.0 - TBD =
+= 1.0 - May 12 2015 =
 * Initial release
 
 == Credits ==

@@ -1,117 +1,101 @@
 module.exports = function (grunt) {
-    'use strict';
+	'use strict';
 
-    grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
+	grunt.initConfig({
+		pkg: grunt.file.readJSON('package.json'),
 
-        /**
-         * Copy files
-         */
-        copy: {
-            main: {
-                options: {
-                    mode: true
-                },
-                src: [
-                    '**',
-                    '!style - Copy.css',
-                    '!node_modules/**',
+		copy: {
+			main: {
+				options: {
+					mode: true
+				},
+				src: [
+					'**',
+					'!style - Copy.css',
                     '!build/**',
-                    '!css/sourcemap/**',
-                    '!.git/**',
-                    '!bin/**',
-                    '!.gitlab-ci.yml',
-                    '!bin/**',
-                    '!tests/**',
-                    '!phpunit.xml.dist',
-                    '!*.sh',
-                    '!*.map',
-                    '!.gitignore',
-                    '!phpunit.xml',
-                    '!README.md',
+					'!node_modules/**',
+					'!assets/**',
+					'!css/sourcemap/**',
+					'!.git/**',
+					'!bin/**',
+					'!.gitlab-ci.yml',
+					'!tests/**',
+					'!phpunit.xml.dist',
+					'!*.sh',
+					'!*.map',
+					'!.gitignore',
+					'!phpunit.xml',
+					'!README.md',
+					'!codesniffer.ruleset.xml',
+					'!vendor/**',
+					'!phpcs.xml.dist',
+					'!phpcs.xml',
                     '!CONTRIBUTING.md',
-                    '!codesniffer.ruleset.xml',
                     '!phpcs.ruleset.xml',
-					'!phpcs.xml.dist',
-					'!phpcs.xml.dist',
-					'!composer.json',
-
-                    /**
+					/**
                      * Are you developer? Then add below files.
                      */
                     '!Gruntfile.js',
-                    '!tailwind.config.js',
-                    '!webpack.config.common.js',
-                    '!webpack.config.dev.js',
-                    '!webpack.config.prod.js',
+					'!postcss.config.js',
+					'!webpack.config.js',
                     '!package.json',
                     '!package-lock.json',
+					'!composer.json',
+					'!composer.lock',
                     '!sass/**',
                     "!*.zip",
-                ],
-                dest: 'elementify/'
-            }
-        },
+				],
+				dest: 'elementify/'
+			}
+		},
 
-        /**
-         * Compress files
-         */
-        compress: {
-            main: {
-                options: {
-                    archive: 'elementify.zip',
-                    mode: 'zip'
-                },
-                files: [
-                    {
-                        src: [
-                            './elementify/**'
-                        ]
+		compress: {
+			main: {
+				options: {
+					archive: 'elementify.zip',
+					mode: 'zip'
+				},
+				files: [
+					{
+						src: [
+							'./elementify/**'
+						]
 
-                    }
-                ]
-            }
-        },
+					}
+				]
+			}
+		},
 
-        /**
-         * Clean files
-         */
-        clean: {
-            main: ["elementify"],
-            zip: ["elementify.zip"]
+		clean: {
+			main: ["elementify"],
+			zip: ["elementify.zip"],
+		},
 
-        },
+		makepot: {
+			target: {
+				options: {
+					domainPath: '/',
+					mainFile: 'elementify.php',
+					potFilename: 'languages/elementify.pot',
+					potHeaders: {
+						poedit: true,
+						'x-poedit-keywordslist': true
+					},
+					type: 'wp-plugin',
+					updateTimestamp: true
+				}
+			}
+		},
 
-        wp_readme_to_markdown: {
-            your_target: {
-                files: {
-                    "README.md": "readme.txt"
-                }
-            },
-        },
+		wp_readme_to_markdown: {
+			your_target: {
+				files: {
+					"README.md": "readme.txt"
+				}
+			},
+		},
 
-        /**
-         * Generate POT
-         */
-        makepot: {
-            target: {
-                options: {
-                    domainPath: '/',
-                    potFilename: 'languages/elementify.pot',
-                    potHeaders: {
-                        poedit: true,
-                        'x-poedit-keywordslist': true
-                    },
-                    type: 'wp-plugin',
-                    updateTimestamp: true
-                }
-            }
-        },
-
-        /**
-         * Add textdomain
-         */
-        addtextdomain: {
+		addtextdomain: {
             options: {
                 textdomain: 'elementify',
             },
@@ -128,7 +112,7 @@ module.exports = function (grunt) {
             }
         },
 
-        /**
+		/**
          * Check textdomain
          */
         checktextdomain: {
@@ -161,9 +145,9 @@ module.exports = function (grunt) {
                 }],
             }
         },
-    });
+	});
 
-    /**
+	/**
      * Load Grunt Tasks
      */
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -172,11 +156,17 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-wp-i18n');
     grunt.loadNpmTasks('grunt-checktextdomain');
 
-    // Generate Release package
-    grunt.registerTask('release', ['clean:zip', 'copy', 'compress', 'clean:main']);
+	/* Read File Generation task */
+	grunt.loadNpmTasks("grunt-wp-readme-to-markdown");
 
-    // i18n
-    grunt.registerTask('i18n', ['checktextdomain', 'addtextdomain', 'makepot']);
+	// Generate Read me file
+	grunt.registerTask( "readme", ["wp_readme_to_markdown"] );
 
-    grunt.util.linefeed = '\n';
+	// i18n
+	grunt.registerTask('i18n', ['checktextdomain', 'addtextdomain', 'makepot']);
+
+	// Generate Release package
+	grunt.registerTask('release', ['clean:zip', 'copy', 'compress', 'clean:main']);
+
+	grunt.util.linefeed = '\n';
 };

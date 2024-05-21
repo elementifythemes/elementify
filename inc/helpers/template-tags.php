@@ -58,6 +58,60 @@ if ( ! function_exists( 'elementify_the_post_thumbail' ) ) {
 	}
 }
 
+if ( ! function_exists( 'aquila_posted_on' ) ) {
+
+	/**
+	 * Prints HTML with meta information for the current post-date/time.
+	 *
+	 * @return void
+	 */
+	function aquila_posted_on() {
+
+		$year                        = get_the_date( 'Y' );
+		$month                       = get_the_date( 'n' );
+		$day                         = get_the_date( 'j' );
+		$post_date_archive_permalink = get_day_link( $year, $month, $day );
+
+		$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
+
+		// Post is modified ( when post published time is not equal to post modified time )
+		if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
+			$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
+		}
+
+		$time_string = sprintf( $time_string,
+			esc_attr( get_the_date( DATE_W3C ) ),
+			esc_attr( get_the_date() ),
+			esc_attr( get_the_modified_date( DATE_W3C ) ),
+			esc_attr( get_the_modified_date() )
+		);
+
+		$posted_on = sprintf(
+			esc_html_x( 'Posted on %s', 'post date', 'elementify' ),
+			'<a href="' . esc_url( $post_date_archive_permalink ) . '" rel="bookmark">' . $time_string . '</a>'
+		);
+
+		echo '<span class="posted-on text-secondary">' . $posted_on . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+}
+
+if ( ! function_exists( 'aquila_posted_by' ) ) {
+
+	/**
+	 * Prints HTML with meta information for the current author.
+	 *
+	 * @return void
+	 */
+	function aquila_posted_by() {
+		$byline = sprintf(
+			esc_html_x( ' by %s', 'post author', 'elementify' ),
+			'<span class="author vcard"><a href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
+		);
+
+		echo '<span class="byline text-secondary">' . $byline . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+}
+
 if ( ! function_exists( 'elementify_the_excerpt' ) ) {
 
 	/**
@@ -141,14 +195,77 @@ if ( ! function_exists( 'elementify_excerpt_more' ) ) {
 	}
 }
 
-if ( ! function_exists( 'elementify_is_uploaded_via_wp_admin' ) ) {
+
+
+if ( ! function_exists( 'aquila_the_post_pagination' ) ) {
+
+	/**
+	 * Display Post pagination with prev next, first last, to, from
+	 *
+	 * @param $current_page_no
+	 * @param $posts_per_page
+	 * @param $article_query
+	 * @param $first_page_url
+	 * @param $last_page_url
+	 * @param bool $is_query_param_structure
+	 */
+	function aquila_the_post_pagination( $current_page_no, $posts_per_page, $article_query, $first_page_url, $last_page_url, bool $is_query_param_structure = true ) {
+		$prev_posts = ( $current_page_no - 1 ) * $posts_per_page;
+		$from       = 1 + $prev_posts;
+		$to         = count( $article_query->posts ) + $prev_posts;
+		$of         = $article_query->found_posts;
+		$total_pages = $article_query->max_num_pages;
+
+		$base = ! empty( $is_query_param_structure ) ? add_query_arg( 'page', '%#%' ) :  get_pagenum_link( 1 ) . '%_%';
+		$format = ! empty( $is_query_param_structure ) ? '?page=%#%' : 'page/%#%';
+
+		?>
+	<div class="mt-0 md:mt-10 mb-10 lg:my-5 flex items-center justify-end posts-navigation">
+    <?php
+			if ( 1 < $total_pages && !empty( $first_page_url ) ) {
+				printf(
+					'<span class="mr-2">Showing %1$s - %2$s Of %3$s</span>',
+					$from,
+					$to,
+					$of
+				);
+			}
+
+
+			// First Page
+			if ( 1 !== $current_page_no && ! empty( $first_page_url ) ) {
+				printf( '<a class="first-pagination-link btn border border-secondary mr-2" href="%1$s" title="first-pagination-link">%2$s</a>', esc_url( $first_page_url ), __( 'First', 'elementify' ) );
+			}
+
+			echo paginate_links( [
+				'base'      => $base,
+				'format'    => $format,
+				'current'   => $current_page_no,
+				'total'     => $total_pages,
+				'prev_text' => __( 'Prev', 'elementify' ),
+				'next_text' => __( 'Next', 'elementify' ),
+			] );
+
+			// Last Page
+			if ( $current_page_no < $total_pages && !empty( $last_page_url ) ) {
+
+				printf( '<a class="last-pagination-link btn border border-secondary ml-2" href="%1$s" title="last-pagination-link">%2$s</a>', esc_url( $last_page_url ), __( 'Last', 'elementify' ) );
+			}
+
+			?>
+	</div>
+<?php
+	}
+}
+
+if ( ! function_exists( 'aquila_is_uploaded_via_wp_admin' ) ) {
 
 	/**
 	 * Checks to see if the specified user id has a uploaded the image via wp_admin.
 	 *
 	 * @return bool  Whether or not the user has a gravatar
 	 */
-	function elementify_is_uploaded_via_wp_admin( $gravatar_url ) {
+	function aquila_is_uploaded_via_wp_admin( $gravatar_url ) {
 
 		$parsed_url = wp_parse_url( $gravatar_url );
 
@@ -160,7 +277,7 @@ if ( ! function_exists( 'elementify_is_uploaded_via_wp_admin' ) ) {
 	}
 }
 
-if ( ! function_exists( 'elementify_has_gravatar' ) ) {
+if ( ! function_exists( 'aquila_has_gravatar' ) ) {
 
 	/**
 	 * If the gravatar is uploaded returns true.
@@ -183,11 +300,11 @@ if ( ! function_exists( 'elementify_has_gravatar' ) ) {
 	 *
 	 * @return bool
 	 */
-	function elementify_has_gravatar( $user_email ) {
+	function aquila_has_gravatar( $user_email ) {
 
 		$gravatar_url = get_avatar_url( $user_email );
 
-		if ( elementify_is_uploaded_via_wp_admin( $gravatar_url ) ) {
+		if ( aquila_is_uploaded_via_wp_admin( $gravatar_url ) ) {
 			return true;
 		}
 
